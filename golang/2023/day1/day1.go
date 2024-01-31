@@ -67,7 +67,10 @@ func stringToInt(s string) int {
 		"8":     8,
 		"9":     9,
 	}
-	return digitsMap[s]
+	if val, ok := digitsMap[s]; ok {
+		return val
+	}
+	return -1
 }
 
 func partTwo() {
@@ -79,28 +82,18 @@ func partTwo() {
 
 	totalSum := 0
 
+	count := 0
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
+		count++
 		text := scanner.Text()
-		firstIdx := -1
+		firstIdx := len(text)
 		lastIdx := -1
 		var firstVal string
 		var lastVal string
 
-		for _, digit := range []string{"1", "2", "3", "4", "5", "6", "7", "8", "9"} {
-			currIdxFirst := strings.Index(text, digit)
-			if currIdxFirst > -1 && currIdxFirst < firstIdx {
-				firstIdx = currIdxFirst
-				firstVal = string(digit)
-			}
-			currIdxLast := strings.LastIndex(text, digit)
-			if currIdxLast > -1 && currIdxLast > lastIdx {
-				lastIdx = currIdxLast
-				lastVal = string(digit)
-			}
-		}
-
-		for _, digit := range []string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"} {
+		for _, digit := range []string{"1", "2", "3", "4", "5", "6", "7", "8", "9",
+			"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"} {
 			currIdxFirst := strings.Index(text, digit)
 			if currIdxFirst > -1 && currIdxFirst < firstIdx {
 				firstIdx = currIdxFirst
@@ -115,10 +108,10 @@ func partTwo() {
 
 		firstValue := stringToInt(firstVal)
 		lastValue := stringToInt(lastVal)
-
 		totalSum += 10*firstValue + lastValue
 
 	}
+
 	if err := scanner.Err(); err != nil {
 		panic(err)
 	}
