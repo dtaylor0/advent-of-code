@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -54,7 +55,6 @@ func GameIsPossible(game *string, redCubes int, greenCubes int, blueCubes int) b
 	return true
 }
 
-
 func GetGameID(game *string) int {
 	idx := strings.Index(*game, ":")
 	var firstIdx int
@@ -82,9 +82,7 @@ func PartOne() {
 
 	totalSum := 0
 	scanner := bufio.NewScanner(file)
-	counter := 0
 	for scanner.Scan() {
-		counter++
 		line := scanner.Text()
 		if GameIsPossible(&line, 12, 13, 14) {
 			gameId := GetGameID(&line)
@@ -99,6 +97,59 @@ func PartOne() {
 	fmt.Printf("Part One: %d\n", totalSum)
 }
 
+func GetAllValues(s *string, color string) []int {
+	currIdx := strings.Index((*s), color)
+	values := []int{}
+	for currIdx > 0 && currIdx < len((*s)) {
+		values = append(values, GetNum(s, currIdx-1))
+		nextIdx := strings.Index((*s)[currIdx+1:], color)
+		if nextIdx == -1 {
+			break
+		}
+		currIdx += strings.Index((*s)[currIdx+1:], color) + 1
+	}
+	return values
+}
+
+func PartTwo() {
+	file, err := os.Open("./input.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	totalSum := 0
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		pwr := 1
+
+		redValues := GetAllValues(&line, "red")
+		greenValues := GetAllValues(&line, "green")
+		blueValues := GetAllValues(&line, "blue")
+
+		if len(redValues) > 0 {
+			pwr *= slices.Max(redValues)
+		}
+		if len(greenValues) > 0 {
+			pwr *= slices.Max(greenValues)
+		}
+		if len(blueValues) > 0 {
+			pwr *= slices.Max(blueValues)
+		}
+
+		totalSum += pwr
+	}
+
+	if err := scanner.Err(); err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Part Two: %d\n", totalSum)
+}
+
 func main() {
 	PartOne()
+	PartTwo()
 }
