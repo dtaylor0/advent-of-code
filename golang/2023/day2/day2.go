@@ -8,15 +8,15 @@ import (
 	"strings"
 )
 
-func GetNum(s string, lastIdx int) int {
+func GetNum(s *string, lastIdx int) int {
 	var firstIdx int
 	for i := lastIdx - 1; i > -1; i-- {
-		if s[i] == ' ' {
+		if (*s)[i] == ' ' {
 			firstIdx = i + 1
 			break
 		}
 	}
-	digit := s[firstIdx:lastIdx]
+	digit := (*s)[firstIdx:lastIdx]
 	num, err := strconv.Atoi(digit)
 	if err != nil {
 		panic(err)
@@ -28,7 +28,7 @@ func GameIsPossible(game string, redCubes int, greenCubes int, blueCubes int) bo
 	for i, c := range game {
 		if c == 'r' {
 			if game[i+1] == 'e' && game[i+2] == 'd' {
-				numRedCubes := GetNum(game, i-1)
+				numRedCubes := GetNum(&game, i-1)
 				if numRedCubes > redCubes {
 					return false
 				}
@@ -36,7 +36,7 @@ func GameIsPossible(game string, redCubes int, greenCubes int, blueCubes int) bo
 		}
 		if c == 'g' {
 			if game[i+1] == 'r' && game[i+2] == 'e' && game[i+3] == 'e' && game[i+4] == 'n' {
-				numGreenCubes := GetNum(game, i-1)
+				numGreenCubes := GetNum(&game, i-1)
 				if numGreenCubes > greenCubes {
 					return false
 				}
@@ -44,7 +44,7 @@ func GameIsPossible(game string, redCubes int, greenCubes int, blueCubes int) bo
 		}
 		if c == 'b' {
 			if game[i+1] == 'l' && game[i+2] == 'u' && game[i+3] == 'e' {
-				numBlueCubes := GetNum(game, i-1)
+				numBlueCubes := GetNum(&game, i-1)
 				if numBlueCubes > blueCubes {
 					return false
 				}
@@ -55,16 +55,16 @@ func GameIsPossible(game string, redCubes int, greenCubes int, blueCubes int) bo
 }
 
 
-func GetGameID(game string) int {
-	idx := strings.Index(game, ":")
+func GetGameID(game *string) int {
+	idx := strings.Index(*game, ":")
 	var firstIdx int
 	for i := idx - 1; i > -1; i-- {
-		if game[i] == ' ' {
+		if (*game)[i] == ' ' {
 			firstIdx = i + 1
 			break
 		}
 	}
-	digit := game[firstIdx:idx]
+	digit := (*game)[firstIdx:idx]
 	gid, err := strconv.Atoi(digit)
 	if err != nil {
 		panic(err)
@@ -87,7 +87,7 @@ func PartOne() {
 		counter++
 		line := scanner.Text()
 		if GameIsPossible(line, 12, 13, 14) {
-			gameId := GetGameID(line)
+			gameId := GetGameID(&line)
 			totalSum += gameId
 		}
 	}
