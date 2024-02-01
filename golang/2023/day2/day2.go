@@ -9,73 +9,78 @@ import (
 )
 
 func GameIsPossible(game string, redCubes int, greenCubes int, blueCubes int) bool {
-	redIdx := strings.Index(game, "red")
-	greenIdx := strings.Index(game, "green")
-	blueIdx := strings.Index(game, "blue")
+	for i, c := range game {
+		if c == 'r' {
+			if game[i+1] == 'e' && game[i+2] == 'd' {
+				var lastIdx int
+				for j := i - 2; j > -1; j-- {
+					if game[j] == ' ' {
+						lastIdx = j + 1
+						break
+					}
+				}
+				digit := game[lastIdx : i-1]
+				numRedCubes, err := strconv.Atoi(digit)
+				if err != nil {
+					panic(err)
+				}
 
-	if redIdx > -1 {
-		var lastIdx int
-		for i := redIdx - 2; i > -1; i-- {
-			if game[i] == ' ' {
-				lastIdx = i+1
-				break
+				if numRedCubes > redCubes {
+					return false
+				}
 			}
 		}
-		digit := game[lastIdx : redIdx-1]
-		numRedCubes, err := strconv.Atoi(digit)
-		if err != nil {
-			panic(err)
-		}
+		if c == 'g' {
+			if game[i+1] == 'r' && game[i+2] == 'e' && game[i+3] == 'e' && game[i+4] == 'n' {
+				var lastIdx int
+				for j := i - 2; j > -1; j-- {
+					if game[j] == ' ' {
+						lastIdx = j + 1
+						break
+					}
+				}
+				digit := game[lastIdx : i-1]
+				numGreenCubes, err := strconv.Atoi(digit)
+				if err != nil {
+					panic(err)
+				}
 
-		if numRedCubes > redCubes {
-			return false
-		}
-	}
-	if greenIdx > -1 {
-		var lastIdx int
-		for i := greenIdx - 2; i > -1; i-- {
-			if game[i] == ' ' {
-				lastIdx = i+1
-				break
+				if numGreenCubes > greenCubes {
+					return false
+				}
 			}
 		}
-		digit := game[lastIdx : greenIdx-1]
-		numGreenCubes, err := strconv.Atoi(digit)
-		if err != nil {
-			panic(err)
-		}
+		if c == 'b' {
+			if game[i+1] == 'l' && game[i+2] == 'u' && game[i+3] == 'e' {
+				var lastIdx int
+				for j := i - 2; j > -1; j-- {
+					if game[j] == ' ' {
+						lastIdx = j + 1
+						break
+					}
+				}
+				digit := game[lastIdx : i-1]
+				numBlueCubes, err := strconv.Atoi(digit)
+				if err != nil {
+					panic(err)
+				}
 
-		if numGreenCubes > greenCubes {
-			return false
-		}
-	}
-	if blueIdx > -1 {
-		var lastIdx int
-		for i := blueIdx - 2; i > -1; i-- {
-			if game[i] == ' ' {
-				lastIdx = i+1
-				break
+				if numBlueCubes > blueCubes {
+					return false
+				}
 			}
-		}
-		digit := game[lastIdx : blueIdx-1]
-		numBlueCubes, err := strconv.Atoi(digit)
-		if err != nil {
-			panic(err)
-		}
-
-		if numBlueCubes > blueCubes {
-			return false
 		}
 	}
 	return true
 }
+
 
 func GetGameID(game string) int {
 	idx := strings.Index(game, ":")
 	var firstIdx int
 	for i := idx - 1; i > -1; i-- {
 		if game[i] == ' ' {
-			firstIdx = i+1
+			firstIdx = i + 1
 			break
 		}
 	}
@@ -97,10 +102,13 @@ func PartOne() {
 
 	totalSum := 0
 	scanner := bufio.NewScanner(file)
+	counter := 0
 	for scanner.Scan() {
+		counter++
 		line := scanner.Text()
 		if GameIsPossible(line, 12, 13, 14) {
-			totalSum += GetGameID(line)
+			gameId := GetGameID(line)
+			totalSum += gameId
 		}
 	}
 
