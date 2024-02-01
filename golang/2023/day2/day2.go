@@ -8,23 +8,27 @@ import (
 	"strings"
 )
 
+func GetNum(s string, lastIdx int) int {
+	var firstIdx int
+	for i := lastIdx - 1; i > -1; i-- {
+		if s[i] == ' ' {
+			firstIdx = i + 1
+			break
+		}
+	}
+	digit := s[firstIdx:lastIdx]
+	num, err := strconv.Atoi(digit)
+	if err != nil {
+		panic(err)
+	}
+	return num
+}
+
 func GameIsPossible(game string, redCubes int, greenCubes int, blueCubes int) bool {
 	for i, c := range game {
 		if c == 'r' {
 			if game[i+1] == 'e' && game[i+2] == 'd' {
-				var lastIdx int
-				for j := i - 2; j > -1; j-- {
-					if game[j] == ' ' {
-						lastIdx = j + 1
-						break
-					}
-				}
-				digit := game[lastIdx : i-1]
-				numRedCubes, err := strconv.Atoi(digit)
-				if err != nil {
-					panic(err)
-				}
-
+				numRedCubes := GetNum(game, i-1)
 				if numRedCubes > redCubes {
 					return false
 				}
@@ -32,19 +36,7 @@ func GameIsPossible(game string, redCubes int, greenCubes int, blueCubes int) bo
 		}
 		if c == 'g' {
 			if game[i+1] == 'r' && game[i+2] == 'e' && game[i+3] == 'e' && game[i+4] == 'n' {
-				var lastIdx int
-				for j := i - 2; j > -1; j-- {
-					if game[j] == ' ' {
-						lastIdx = j + 1
-						break
-					}
-				}
-				digit := game[lastIdx : i-1]
-				numGreenCubes, err := strconv.Atoi(digit)
-				if err != nil {
-					panic(err)
-				}
-
+				numGreenCubes := GetNum(game, i-1)
 				if numGreenCubes > greenCubes {
 					return false
 				}
@@ -52,19 +44,7 @@ func GameIsPossible(game string, redCubes int, greenCubes int, blueCubes int) bo
 		}
 		if c == 'b' {
 			if game[i+1] == 'l' && game[i+2] == 'u' && game[i+3] == 'e' {
-				var lastIdx int
-				for j := i - 2; j > -1; j-- {
-					if game[j] == ' ' {
-						lastIdx = j + 1
-						break
-					}
-				}
-				digit := game[lastIdx : i-1]
-				numBlueCubes, err := strconv.Atoi(digit)
-				if err != nil {
-					panic(err)
-				}
-
+				numBlueCubes := GetNum(game, i-1)
 				if numBlueCubes > blueCubes {
 					return false
 				}
