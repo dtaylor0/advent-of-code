@@ -120,12 +120,12 @@ func contains(s []int, v int) bool {
 	return false
 }
 
-func addNumToGearTracker(num int, i int, j int, gearTracker map[[2]int][]int) {
+func addToGearTracker(value int, i int, j int, gearTracker map[[2]int][]int) {
 	idx := [2]int{i, j}
-	if gearTracker[idx] != nil && !contains(gearTracker[idx], num) {
-		gearTracker[idx] = append(gearTracker[idx], num)
+	if gearTracker[idx] != nil && !contains(gearTracker[idx], value) {
+		gearTracker[idx] = append(gearTracker[idx], value)
 	} else {
-		gearTracker[idx] = []int{num}
+		gearTracker[idx] = []int{value}
 	}
 }
 
@@ -162,9 +162,9 @@ func part2() {
 
 			if !isNumber && !checkIfPart {
 				for _, gear := range gears {
-					addNumToGearTracker(getNumber(currNumber), gear[0], gear[1], gearTracker)
+					addToGearTracker(getNumber(currNumber), gear[0], gear[1], gearTracker)
 				}
-                gears = [][2]int{}
+				gears = [][2]int{}
 				checkIfPart = true
 			}
 
@@ -195,10 +195,10 @@ func part2() {
 		}
 
 		if isNumber && !checkIfPart {
-            for _, gear := range gears {
-                addNumToGearTracker(getNumber(currNumber), gear[0], gear[1], gearTracker)
-            }
-            gears = [][2]int{}
+			for _, gear := range gears {
+				addToGearTracker(getNumber(currNumber), gear[0], gear[1], gearTracker)
+			}
+			gears = [][2]int{}
 			checkIfPart = true
 		}
 	}
