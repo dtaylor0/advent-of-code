@@ -20,7 +20,7 @@ func convert(value int, convMap [][3]int) int {
 			return dest + value - src
 		}
 	}
-	return value
+    return value
 }
 
 func toInts(sl []string) []int {
@@ -217,30 +217,24 @@ func (s Seed) Surrounds(r Range) bool {
 }
 
 func cut(seed Seed, with Range) (removed Seed, leftover []Seed) {
-	if seed.StartsIn(with) {
-		if seed.EndsIn(with) {
-			removed = seed
-		} else {
-			removed = Seed{seed.Start, with.Start + with.Length - seed.Start}
-			leftover = []Seed{{with.Start + with.Length, seed.Start + seed.Length - with.Start - with.Length}}
-		}
+	if seed.StartsIn(with) && seed.EndsIn(with) {
+		removed = seed
+	} else if seed.StartsIn(with) && !seed.EndsIn(with) {
+		removed = Seed{seed.Start, with.Start + with.Length - seed.Start}
+		leftover = []Seed{{with.Start + with.Length, seed.Start + seed.Length - with.Start - with.Length}}
 	} else if seed.EndsIn(with) {
 		removed = Seed{with.Start, seed.Start + seed.Length - with.Start}
 		leftover = []Seed{{seed.Start, seed.Length - removed.Length}}
 	} else if seed.Surrounds(with) {
 		removed = Seed{with.Start, with.Length}
-		leftover = []Seed{{seed.Start, with.Start - seed.Start}, {with.Start + with.Length, seed.Start + seed.Length - with.Start - with.Length}}
+		leftover = []Seed{
+            {seed.Start, with.Start - seed.Start},
+            {with.Start + with.Length, seed.Start + seed.Length - with.Start - with.Length},
+        }
 	} else {
 		leftover = []Seed{seed}
 	}
 	return
-}
-
-func testCut(s Seed, r Range) {
-	fmt.Println("Cutting", s, "with", r, ":")
-	removed, leftover := cut(s, r)
-	fmt.Println("Removed:", removed)
-	fmt.Println("Leftovers:", leftover)
 }
 
 func part2() {
@@ -269,7 +263,6 @@ func part2() {
 					offset := removed.Start - conv.Src
 					newSeed := Seed{conv.Dest + offset, removed.Length}
 					nextSeeds = append(nextSeeds, newSeed)
-					fmt.Println(seed, "->", removed, "->", newSeed)
 				}
 				validLeftover := []Seed{}
 				for _, l := range leftover {
@@ -291,7 +284,6 @@ func part2() {
 			}
 		}
 		seeds = slices.Concat(seeds, nextSeeds)
-		fmt.Println(seeds)
 		nextSeeds = []Seed{}
 		nextMap = nextConvertMap(scanner)
 	}
