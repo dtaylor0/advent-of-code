@@ -133,17 +133,19 @@ func parseHands(filename string) []Hand {
 func part1() {
 	fmt.Print("Part 1:")
 	hands := parseHands("input.txt")
-	fmt.Println(hands)
 	total := 0
 	for i, hand := range hands {
-		fmt.Println("Mult is ", i+1)
-		fmt.Println("Bid is ", hand.Bid)
 		total += (i + 1) * hand.Bid
 	}
 	fmt.Println(total)
 }
 
+func part2() {
+	fmt.Print("Part 2:")
+}
+
 func main() {
 	fmt.Println("Day 7")
 	part1()
+	part2()
 }
