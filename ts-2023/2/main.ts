@@ -34,7 +34,37 @@ function part1() {
     console.log("Part 1: ", sum);
 }
 
-function part2() {}
+function power(game: string): number {
+    let maxes: { [key: string]: number } = {
+        red: 0,
+        green: 0,
+        blue: 0,
+    };
+    const rounds = game.split("; ");
+    for (const round of rounds) {
+        const colors = round.split(", ");
+        for (const color of colors) {
+            let c = color.split(" ");
+            let [count, colorName] = [+c[0], c[1]];
+            if (count > maxes[colorName]) {
+                maxes[colorName] = count;
+            }
+        }
+    }
+    return maxes.red * maxes.green * maxes.blue;
+}
+
+function part2() {
+    let sum = 0;
+
+    const lines = getLines("input.txt");
+    for (const line of lines) {
+        const game = line.split(": ")[1];
+        sum += power(game);
+    }
+
+    console.log("Part 2: ", sum);
+}
 
 console.log("Day 2");
 part1();
