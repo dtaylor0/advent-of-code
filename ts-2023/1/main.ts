@@ -1,11 +1,9 @@
 import { readFileSync } from "fs";
 
-console.log("Day 1");
-
 function getValue(line: string): number {
     const reg = /(\d)/g;
     const matches = [...line.matchAll(reg)];
-    if (!matches || matches.length === 0) {
+    if (!matches) {
         throw new Error("No digit");
     }
 
@@ -68,14 +66,14 @@ function getValuePart2(line: string): number {
     for (const [digit, v] of Object.entries(digits)) {
         let firstOcc = line.indexOf(digit);
         if (firstOcc >= 0) {
-            if (!first || (first && firstOcc < first.idx)) {
+            if (!first || firstOcc < first.idx) {
                 first = { idx: firstOcc, val: v };
             }
         }
 
         let lastOcc = line.lastIndexOf(digit);
         if (lastOcc >= 0) {
-            if (!last || (last && lastOcc > last.idx)) {
+            if (!last || lastOcc > last.idx) {
                 last = { idx: lastOcc, val: v };
             }
         }
@@ -96,5 +94,6 @@ function part2() {
     console.log("Part 2: %d", sum);
 }
 
+console.log("Day 1");
 part1();
 part2();
