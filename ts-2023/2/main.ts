@@ -4,31 +4,28 @@ function getLines(fname: string): Array<string> {
     return fs.readFileSync(fname, "utf8").trim().split("\n");
 }
 
-function part1() {
+function valid(round: string): boolean {
     const limits: { [key: string]: number } = {
         red: 12,
         green: 13,
         blue: 14,
     };
+    const colors = round.split(", ");
+    return colors.every((color: string) => {
+        let c = color.split(" ");
+        let [count, colorName] = [+c[0], c[1]];
+        return count <= limits[colorName];
+    });
+}
+
+function part1() {
     let sum = 0;
 
     const lines = getLines("input.txt");
     for (const line of lines) {
         const gameId = +line.split(":")[0].split(" ")[1];
         const rounds = line.split(": ")[1].split("; ");
-        let game = rounds.reduce(
-            (acc: boolean, round: string): boolean =>
-                acc &&
-                round
-                    .split(", ")
-                    .reduce(
-                        (accColor: boolean, color: string): boolean =>
-                            accColor &&
-                            +color.split(" ")[0] <= limits[color.split(" ")[1]],
-                        true,
-                    ),
-            true,
-        );
+        let game = rounds.every((round: string) => valid(round));
         if (game) {
             sum += gameId;
         }
