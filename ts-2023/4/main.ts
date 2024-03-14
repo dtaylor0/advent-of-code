@@ -8,24 +8,18 @@ function part1() {
     const lines = getLines("input.txt");
     let res = lines
         .map((line: string): number => {
-            const game = line.split(": ")[1];
+            const game = line.split(": ")[1].trim();
             const winners = game
                 .split(" | ")[0]
-                .trim()
                 .split(/[ ]+/)
-                .map((num) => +num);
             const cards = game
                 .split(" | ")[1]
-                .trim()
                 .split(/[ ]+/)
-                .map((num) => +num);
 
-            let sum = 0;
-            for (const card of cards) {
-                if (winners.includes(card)) {
-                    sum += 1;
-                }
-            }
+            let sum = cards.reduce(
+                (acc, card) => acc + (winners.includes(card) ? 1 : 0),
+                0,
+            );
             if (sum > 0) {
                 return 1 * 2 ** (sum - 1);
             }
