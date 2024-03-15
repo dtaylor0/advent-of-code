@@ -32,14 +32,15 @@ function part2() {
         const winners = card[0].split(/\s+/);
         const nums = card[1].split(/\s+/);
 
-        let sum = nums.reduce(
-            (acc, card) => acc + Number(winners.includes(card)),
-            0,
-        );
         const cardId = +line.split(": ")[0].trim().split(/\s+/)[1];
         let cardCount = counts.get(cardId) || 0;
         cardCount++;
         total += cardCount;
+
+        let sum = nums.reduce(
+            (acc, card) => acc + Number(winners.includes(card)),
+            0,
+        );
 
         if (sum > 0) {
             for (let j = 1; j <= sum; j++) {
