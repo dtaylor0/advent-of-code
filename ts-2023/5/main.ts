@@ -122,9 +122,7 @@ function part2() {
                     next.push(cutSeed);
                 }
                 if (newSeeds) {
-                    negatives.push(
-                        ...newSeeds,
-                    );
+                    negatives.push(...newSeeds);
                 }
             }
 
