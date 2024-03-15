@@ -18,65 +18,32 @@ function cut(
     conv: Convert,
     seed: Seed,
 ): [Seed | undefined, Seed[] | undefined] {
-    let startsInConv =
-        seed.start >= conv.src && seed.start < conv.src + conv.range;
-    let endsInConv =
-        seed.start + seed.length >= conv.src &&
-        seed.start + seed.length < conv.src + conv.range;
-    let result: [Seed | undefined, Seed[] | undefined] = [undefined, undefined];
-    let translation = conv.dest - conv.src;
+    const { src, range, dest } = conv;
+    const { start, length } = seed;
+    const translation = dest - src;
 
-    if (startsInConv && endsInConv) {
-        return [
-            { start: seed.start + translation, length: seed.length },
-            undefined,
-        ];
-    } else if (startsInConv && !endsInConv) {
-        let cutSeed = {
-            start: seed.start + translation,
-            length: conv.src + conv.range - seed.start,
-        };
-        let newSeed = {
-            start: seed.start + cutSeed.length,
-            length: seed.start + seed.length - seed.start - cutSeed.length,
-        };
-        result = [cutSeed, [newSeed]];
-    } else if (!startsInConv && endsInConv) {
-        let cutSeed = {
-            start: conv.src + translation,
-            length: seed.start + seed.length - conv.src,
-        };
-        let newSeed = {
-            start: seed.start,
-            length: conv.src - seed.start,
-        };
-        result = [cutSeed, [newSeed]];
-    } else if (!startsInConv && !endsInConv) {
-        if (
-            (conv.src < seed.start && conv.src + conv.range < seed.start) ||
-            (conv.src > seed.start + seed.length &&
-                conv.src + conv.range > seed.start + seed.length)
-        ) {
-            result = [undefined, [seed]];
-        } else {
-            let cutSeed = {
-                start: conv.src + translation,
-                length: conv.range,
-            };
-            let newSeeds = [
-                {
-                    start: seed.start,
-                    length: conv.src - seed.start,
-                },
-                {
-                    start: conv.src + conv.range,
-                    length: seed.start + seed.length - conv.src - conv.range,
-                },
-            ];
-            result = [cutSeed, newSeeds];
-        }
+    if (start >= src + range || start + length <= src) {
+        return [undefined, [seed]];
     }
-    return result;
+
+    const cutStart = Math.max(start, src);
+    const cutEnd = Math.min(start + length, src + range);
+    const cutLength = cutEnd - cutStart;
+
+    const cutSeed: Seed = {
+        start: cutStart + translation,
+        length: cutLength,
+    };
+
+    const newSeeds: Seed[] = [];
+    if (start < cutStart) {
+        newSeeds.push({ start, length: cutStart - start });
+    }
+    if (start + length > cutEnd) {
+        newSeeds.push({ start: cutEnd, length: start + length - cutEnd });
+    }
+
+    return [cutSeed, newSeeds.length ? newSeeds : undefined];
 }
 
 type CMap = {
