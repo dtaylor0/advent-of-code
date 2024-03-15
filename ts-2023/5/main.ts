@@ -124,7 +124,6 @@ function part2() {
                 if (newSeeds) {
                     negatives.push(
                         ...newSeeds,
-                        // ...newSeeds.filter((s): boolean => s.start > 0),
                     );
                 }
             }
