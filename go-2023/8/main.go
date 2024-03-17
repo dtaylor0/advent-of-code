@@ -84,7 +84,7 @@ func getLCM(arr []int) int {
 		multiples := make(map[int]int)
 		d := n - 1
 		for d > 1 {
-			if d != n && n%d == 0 {
+			if n%d == 0 {
 				multiples[d]++
 				n = n / d
 			}
@@ -96,15 +96,11 @@ func getLCM(arr []int) int {
 			}
 		}
 	}
-	gcf := 1
+	lcm := 1
 	for k, v := range multiplesAgg {
-		gcf *= k * v
+		lcm *= k * v
 	}
-    mult := gcf
-    for _, n := range arr {
-        mult *= n / gcf
-    }
-	return mult
+	return lcm
 }
 
 func part2() {
