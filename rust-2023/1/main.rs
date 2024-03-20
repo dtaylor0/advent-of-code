@@ -5,11 +5,10 @@ fn file_to_string(fname: &str) -> Result<String, Box<dyn std::error::Error>> {
     Ok(contents)
 }
 
-fn main() {
+fn part1() {
     let fname = "input.txt";
-    let parsed = file_to_string(fname).unwrap_or_default();
-    let trimmed = parsed.trim();
-    let s = trimmed.split('\n');
+    let parsed = file_to_string(fname).unwrap();
+    let s = parsed.trim().split('\n');
 
     let mut sum = 0;
     for line in s {
@@ -29,4 +28,18 @@ fn main() {
     }
 
     println!("Part 1: {}", sum);
+}
+
+fn part2() {
+    let fname = "input.txt";
+    let parsed = file_to_string(fname).unwrap();
+    let s = parsed.trim().split("\n");
+    println!("{}", parsed);
+}
+
+fn main() {
+    println!("Day 1");
+    println!("-----");
+    part1();
+    part2();
 }
