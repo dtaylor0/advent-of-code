@@ -6,21 +6,6 @@ int BUFSIZE = 100;
 char numbers[][9] = {"one", "two",   "three", "four", "five",
                      "six", "seven", "eight", "nine"};
 
-// char **getlines(char *fname) {
-//     FILE *fp;
-//     char *line = malloc(BUFSIZE);
-//     char **output;
-//
-//     fp = fopen("input.txt", "r");
-//     if (fp == NULL) {
-//         perror("Error opening file");
-//         exit(1);
-//     }
-//
-//     while (fgets(line, BUFSIZE, fp) != NULL) {
-//     }
-// }
-
 int part1() {
     FILE *fp;
     char str[BUFSIZE];
@@ -71,7 +56,7 @@ int *findNumberRight(char *line) {
             char *validIdx;
             while (idx != NULL) {
                 validIdx = idx;
-                idx = strstr(validIdx+1, numbers[i]);
+                idx = strstr(validIdx + 1, numbers[i]);
             }
             int currIdx = validIdx - &line[0];
             if (res[0] == -1 || currIdx > res[0]) {
