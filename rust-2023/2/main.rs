@@ -1,6 +1,6 @@
 use std::fs;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 struct Round {
     red: u32,
     green: u32,
@@ -15,45 +15,42 @@ struct Game {
 
 impl From<&str> for Game {
     fn from(value: &str) -> Self {
-        let mut game_and_rounds = value.split(": ");
-        let game_id: u32 = game_and_rounds
+        let mut parts = value.split(": ");
+        let game_id = parts
             .next()
-            .unwrap()
-            .split_whitespace()
-            .nth(1)
-            .unwrap()
-            .parse()
+            .and_then(|s| s.split_whitespace().nth(1))
+            .and_then(|s| s.parse().ok())
             .unwrap();
-        let rounds = game_and_rounds
+
+        let rounds = parts
             .next()
             .unwrap()
             .split("; ")
             .map(|round| {
-                let mut r = Round {
-                    red: 0,
-                    green: 0,
-                    blue: 0,
-                };
+                let mut r = Round::default();
                 for color in round.split(", ") {
                     let mut color_count = color.split_whitespace();
-                    let count: u32 = color_count.next().unwrap().parse().unwrap();
-                    match color_count.next().unwrap() {
-                        "red" => r.red = count,
-                        "green" => r.green = count,
-                        "blue" => r.blue = count,
-                        _ => {}
+                    if let (Some(count), Some(color)) = (color_count.next(), color_count.next()) {
+                        match color {
+                            "red" => r.red = count.parse().unwrap_or(0),
+                            "green" => r.green = count.parse().unwrap_or(0),
+                            "blue" => r.blue = count.parse().unwrap_or(0),
+                            _ => {}
+                        }
                     }
                 }
                 r
             })
             .collect();
-        return Game { game_id, rounds };
+
+        Game { game_id, rounds }
     }
 }
 
 fn part1(contents: &str) {
-    let games = contents.lines().map(|line| Game::from(line));
-    let sum: u32 = games
+    let sum: u32 = contents
+        .lines()
+        .map(Game::from)
         .filter(|game| {
             let (maxred, maxgreen, maxblue) =
                 game.rounds.iter().fold((0, 0, 0), |(mr, mg, mb), r| {
@@ -67,8 +64,9 @@ fn part1(contents: &str) {
 }
 
 fn part2(contents: &str) {
-    let games = contents.lines().map(|line| Game::from(line));
-    let sum: u32 = games
+    let sum: u32 = contents
+        .lines()
+        .map(Game::from)
         .map(|game| {
             let (maxred, maxgreen, maxblue) =
                 game.rounds.iter().fold((0, 0, 0), |(mr, mg, mb), r| {
