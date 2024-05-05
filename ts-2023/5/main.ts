@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "node:fs";
 
 const getLines = (fname: string) => {
     return fs.readFileSync(fname, "utf8").trim().split("\n").filter(Boolean);
@@ -52,15 +52,15 @@ type CMap = {
 };
 
 function getMap(lines: string[]): CMap {
-    let nameLine = lines.shift()!;
-    let name = nameLine.slice(0, -5);
-    let converts: Convert[] = [];
+    const nameLine = lines.shift()!;
+    const name = nameLine.slice(0, -5);
+    const converts: Convert[] = [];
     while (lines.length && /\d/.test(lines[0][0])) {
-        let conv = lines
+        const conv = lines
             .shift()!
             .split(/\s/)
             .map((n) => +n);
-        let c = { src: conv[1], dest: conv[0], range: conv[2] };
+        const c = { src: conv[1], dest: conv[0], range: conv[2] };
         converts.push(c);
     }
     return { name: name, converts: converts };
@@ -76,11 +76,11 @@ function part1() {
     while (lines.length) {
         const currMap = getMap(lines);
         let negatives: number[] = [];
-        let next: number[] = [];
+        const next: number[] = [];
         for (const conv of currMap.converts) {
             for (const seed of seeds) {
                 if (contains(conv, seed)) {
-                    let translation = conv.dest - conv.src;
+                    const translation = conv.dest - conv.src;
                     next.unshift(seed + translation);
                 } else {
                     negatives.unshift(seed);
@@ -103,7 +103,7 @@ type Seed = {
 function part2() {
     const lines = getLines("input.txt");
     const seedsline = lines.shift()!;
-    let seedsValues = seedsline.split(/\s+/).slice(1);
+    const seedsValues = seedsline.split(/\s+/).slice(1);
     let seeds: Seed[] = [];
     for (let i = 0; i < seedsValues.length; i += 2) {
         seeds.push({
@@ -114,10 +114,10 @@ function part2() {
     while (lines.length) {
         const currMap = getMap(lines);
         let negatives: Seed[] = [];
-        let next: Seed[] = [];
+        const next: Seed[] = [];
         for (const conv of currMap.converts) {
             for (const seed of seeds) {
-                let [cutSeed, newSeeds] = cut(conv, seed);
+                const [cutSeed, newSeeds] = cut(conv, seed);
                 if (cutSeed) {
                     next.push(cutSeed);
                 }

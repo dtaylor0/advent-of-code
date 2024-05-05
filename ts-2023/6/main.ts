@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "node:fs";
 
 function getLines(fname: string): string[] {
     return fs.readFileSync(fname, "utf8").trim().split("\n");
@@ -15,7 +15,7 @@ function findMinHold(t: number, d: number, lo: number, hi: number): number {
         }
         return hi;
     }
-    let mid = Math.floor((hi + lo) / 2);
+    const mid = Math.floor((hi + lo) / 2);
     if (distance(mid, t) > d) {
         return findMinHold(t, d, lo, mid);
     }
@@ -24,7 +24,7 @@ function findMinHold(t: number, d: number, lo: number, hi: number): number {
 
 function part1() {
     const lines = getLines("input.txt");
-    let [times, distances] = lines.map((line: string) =>
+    const [times, distances] = lines.map((line: string) =>
         line
             .split(/\s+/)
             .slice(1)
@@ -44,12 +44,12 @@ function part1() {
 
 function part2() {
     const lines = getLines("input.txt");
-    let [t, d] = lines.map(
+    const [t, d] = lines.map(
         (line: string) => +line.split(/\s+/).slice(1).join(""),
     );
     const minHold = findMinHold(t, d, 0, t);
     const options = t + 1;
-    let res = options - 2 * minHold;
+    const res = options - 2 * minHold;
     console.log("Part 2: ", res);
 }
 

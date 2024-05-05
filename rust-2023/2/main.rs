@@ -56,7 +56,7 @@ fn part1(contents: &str) {
                 game.rounds.iter().fold((0, 0, 0), |(mr, mg, mb), r| {
                     (mr.max(r.red), mg.max(r.green), mb.max(r.blue))
                 });
-            return maxred <= 12 && maxgreen <= 13 && maxblue <= 14;
+            maxred <= 12 && maxgreen <= 13 && maxblue <= 14
         })
         .map(|game| game.game_id)
         .sum();

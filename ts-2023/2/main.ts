@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "node:fs";
 
 function getLines(fname: string): Array<string> {
     return fs.readFileSync(fname, "utf8").trim().split("\n");
@@ -12,8 +12,8 @@ function valid(round: string): boolean {
     };
     const colors = round.split(", ");
     return colors.every((color: string) => {
-        let c = color.split(" ");
-        let [count, colorName] = [+c[0], c[1]];
+        const c = color.split(" ");
+        const [count, colorName] = [+c[0], c[1]];
         return count <= limits[colorName];
     });
 }
@@ -25,7 +25,7 @@ function part1() {
     for (const line of lines) {
         const gameId = +line.split(":")[0].split(" ")[1];
         const rounds = line.split(": ")[1].split("; ");
-        let game = rounds.every((round: string) => valid(round));
+        const game = rounds.every((round: string) => valid(round));
         if (game) {
             sum += gameId;
         }
@@ -35,7 +35,7 @@ function part1() {
 }
 
 function power(game: string): number {
-    let maxes: { [key: string]: number } = {
+    const maxes: { [key: string]: number } = {
         red: 0,
         green: 0,
         blue: 0,
@@ -44,8 +44,8 @@ function power(game: string): number {
     for (const round of rounds) {
         const colors = round.split(", ");
         for (const color of colors) {
-            let c = color.split(" ");
-            let [count, colorName] = [+c[0], c[1]];
+            const c = color.split(" ");
+            const [count, colorName] = [+c[0], c[1]];
             if (count > maxes[colorName]) {
                 maxes[colorName] = count;
             }

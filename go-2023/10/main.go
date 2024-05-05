@@ -25,7 +25,6 @@ func connectsTo(maze *[]string, position []int, dir []int) {
 }
 
 func part1() {
-    lines := getLines("input.txt")
 }
 
 func part2() {

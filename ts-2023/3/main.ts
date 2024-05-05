@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "node:fs";
 
 function getLines(fname: string): Array<string> {
     return fs.readFileSync(fname, "utf8").split("\n");
@@ -32,7 +32,7 @@ function get(arr: string[], i: number, j: number): string {
 
 function isGear(arr: string[], i: number, j: number): boolean {
     return dirs.some(([di, dj]): boolean => {
-        let res =
+        const res =
             !isDot(get(arr, i + di, j + dj)) &&
             !isDigit(get(arr, i + di, j + dj));
         return res;
@@ -78,8 +78,8 @@ function getGear(
     j: number,
 ): [number, number] | undefined {
     for (const [di, dj] of dirs) {
-        let gear = get(arr, i + di, j + dj);
-        let res = !isDot(gear) && !isDigit(gear);
+        const gear = get(arr, i + di, j + dj);
+        const res = !isDot(gear) && !isDigit(gear);
         if (res) {
             return [i + di, j + dj];
         }
@@ -92,7 +92,7 @@ function part2() {
     let currIsNumber = false;
     let currGear: number[] | undefined;
     let sum = 0;
-    let gears: number[][] = [];
+    const gears: number[][] = [];
 
     for (let i = 0; i < lines.length; i++) {
         for (let j = 0; j < lines[i].length; j++) {
@@ -103,9 +103,9 @@ function part2() {
                 currGear = currGear || getGear(lines, i, j);
             } else {
                 if (currGear) {
-                    let gr = gears[currGear[0]];
+                    const gr = gears[currGear[0]];
                     if (gr) {
-                        let gc = gr[currGear[1]];
+                        const gc = gr[currGear[1]];
                         if (gc) {
                             sum += +currNumber * gc;
                         }
@@ -121,9 +121,9 @@ function part2() {
         }
 
         if (currGear) {
-            let gr = gears[currGear[0]];
+            const gr = gears[currGear[0]];
             if (gr) {
-                let gc = gr[currGear[1]];
+                const gc = gr[currGear[1]];
                 if (gc) {
                     sum += +currNumber * gc;
                 }

@@ -67,7 +67,7 @@ fn min_value(line: &str, numbers: &[&str; 9]) -> u32 {
         _ => (),
     }
 
-    return mins.iter().min().unwrap().1;
+    mins.iter().min().unwrap().1
 }
 
 fn part2() {
@@ -78,9 +78,7 @@ fn part2() {
     ];
     let sum: u32 = contents
         .lines()
-        .map(|line| {
-            return 10 * min_value(line, &numbers) + max_value(line, &numbers);
-        })
+        .map(|line| 10 * min_value(line, &numbers) + max_value(line, &numbers))
         .sum();
 
     println!("Part 2: {}", sum);
